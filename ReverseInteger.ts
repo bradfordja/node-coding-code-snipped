@@ -12,6 +12,10 @@ export class ReverseInteger {
         return reversed;
     }
 
+    const reversedString = (number: number): string {
+        return number.toString().split('').reverse().join('');
+    }
+
     static main(): void {
         console.log(ReverseInteger.reverseInteger(15));    // 51
         console.log(ReverseInteger.reverseInteger(36));    // 63

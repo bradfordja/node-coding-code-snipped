@@ -10,7 +10,8 @@ export class StringReversal {
 
     static main(): void {
         const input = "Hello, World!";
-        const reversedString = StringReversal.reverseString(input);
+        // const reversedString = StringReversal.reverseString(input);
+        const reversedString = input.split('').reverse().join('');
         console.log(`Reversed String: ${reversedString}`);
     }
 }
