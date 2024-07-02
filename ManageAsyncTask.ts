@@ -1,17 +1,17 @@
 type Task<T> = {
     id: string;
     metadata: Record<string, string>;
-    taskFunction: () => Promise<T>;
+    execute: () => Promise<T>;
 };
 
 class TaskManager<T> {
     private tasks: Map<string, Task<T>> = new Map();
 
-    addTask(id: string, metadata: Record<string, string>, taskFunction: () => Promise<T>): void {
+    addTask(id: string, metadata: Record<string, string>, execute: () => Promise<T>): void {
         if (this.tasks.has(id)) {
             throw new Error(`Task with ID ${id} already exists.`);
         }
-        this.tasks.set(id, { id, metadata, taskFunction });
+        this.tasks.set(id, { id, metadata, execute });
     }
 
     async executeTask(id: string): Promise<T> {
@@ -20,7 +20,7 @@ class TaskManager<T> {
             throw new Error(`Task with ID ${id} not found.`);
         }
         try {
-            const result = await task.taskFunction();
+            const result = await task.execute();
             this.tasks.delete(id); // Optionally remove task after execution
             return result;
         } catch (error) {
