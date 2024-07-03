@@ -58,6 +58,7 @@ class TaskManager<T> {
             this.tasks.delete(id); // Optionally remove task after execution
             return result;
         } catch (error) {
+            console.error(`Task with ID ${id} failed: ${error.message}`, error);
             throw new Error(`Task with ID ${id} failed: ${error.message}`);
         } finally {
             this.semaphore.release();
@@ -79,8 +80,14 @@ class TaskManager<T> {
 
 // Example usage
 async function exampleTask(): Promise<number> {
-    return new Promise<number>((resolve) => {
-        setTimeout(() => resolve(42), 1000);
+    return new Promise<number>((resolve, reject) => {
+        setTimeout(() => {
+            if (Math.random() > 0.5) {
+                resolve(42);
+            } else {
+                reject(new Error("Random failure"));
+            }
+        }, 1000);
     });
 }
 
@@ -101,7 +108,7 @@ async function run() {
 
         console.log('Remaining tasks:', taskManager.listTasks());
     } catch (error) {
-        console.error(error.message);
+        console.error('An error occurred while running tasks:', error);
     }
 }
 
